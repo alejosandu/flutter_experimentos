@@ -37,7 +37,7 @@ class FlushbarPage extends StatelessWidget {
     this.context = context;
     return Scaffold(
       appBar: AppBar(
-        title: SafeArea(child: Text("Flushbar")),
+        title: SafeArea(child: Text("Custom Flushbar")),
         centerTitle: true,
       ),
       body: Center(
