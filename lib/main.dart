@@ -1,4 +1,5 @@
 import 'package:experiments/pages/flushbar_page.dart';
+import 'package:experiments/pages/inherited_widgets_page.dart';
 import 'package:experiments/pages/pseudo_bloc_page.dart';
 import 'package:flutter/material.dart';
 
@@ -19,8 +20,9 @@ class MyApp extends StatelessWidget {
       routes: {
         "flushbar": (_) => FlushbarPage(),
         "pseudoBloc": (_) => PseudoBlocPage(),
+        "inherited": (_) => InheritedWidgetPage(),
       },
-      initialRoute: "pseudoBloc",
+      initialRoute: "inherited",
     );
   }
 }
