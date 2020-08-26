@@ -103,15 +103,25 @@ class CustomOverlayRoute extends OverlayRoute {
 }
 
 class CustomTransitionRoute extends TransitionRoute {
+  int dismissKey = 1;
+
   @override
   Iterable<OverlayEntry> createOverlayEntries() {
     final List<OverlayEntry> overlays = [];
 
     overlays.add(
       OverlayEntry(
-        builder: (_) => FadeTransition(
-          opacity: animation,
-          child: CustomCall(),
+        builder: (_) => Dismissible(
+          key: Key(dismissKey.toString()),
+          onDismissed: (direction) {
+            // dismissKey++;
+            navigator.removeRoute(this);
+          },
+          direction: DismissDirection.startToEnd,
+          child: FadeTransition(
+            opacity: animation,
+            child: CustomCall(),
+          ),
         ),
         maintainState: false,
         opaque: false,
@@ -195,7 +205,7 @@ class _CustomCallState extends State<CustomCall> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     Timer(Duration(seconds: 5), () {
-      Navigator.pop(context);
+      if (mounted) Navigator.pop(context);
     });
   }
 
@@ -219,7 +229,20 @@ class _CustomCallState extends State<CustomCall> {
             )
           ],
         ),
-        child: Scaffold(body: Center(child: Text("Works!"))),
+        child: Scaffold(
+            body: Center(
+                child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Text("Works!"),
+            RaisedButton(
+              child: Text("OK!"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            )
+          ],
+        ))),
       ),
     );
   }
