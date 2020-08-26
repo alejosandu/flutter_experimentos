@@ -15,7 +15,11 @@ class FlushbarPage extends StatelessWidget {
   }
 
   _showCustomOverlayRoute() {
-    Navigator.of(context, rootNavigator: false).push(CustomRoute());
+    Navigator.of(context, rootNavigator: false).push(CustomOverlayRoute());
+  }
+
+  _showCustomTransitionRoute() {
+    Navigator.of(context, rootNavigator: false).push(CustomTransitionRoute());
   }
 
   _showCustomPageRoute() {
@@ -52,6 +56,10 @@ class FlushbarPage extends StatelessWidget {
               onPressed: _showCustomOverlayRoute,
             ),
             RaisedButton(
+              child: Text("Custom TransitionRoute"),
+              onPressed: _showCustomTransitionRoute,
+            ),
+            RaisedButton(
               child: Text("Custom PageRoute"),
               onPressed: _showCustomPageRoute,
             ),
@@ -66,7 +74,7 @@ class FlushbarPage extends StatelessWidget {
   }
 }
 
-class CustomRoute extends OverlayRoute {
+class CustomOverlayRoute extends OverlayRoute {
   @override
   Iterable<OverlayEntry> createOverlayEntries() {
     final List<OverlayEntry> overlays = [];
@@ -81,6 +89,32 @@ class CustomRoute extends OverlayRoute {
 
     return overlays;
   }
+}
+
+class CustomTransitionRoute extends TransitionRoute {
+  @override
+  Iterable<OverlayEntry> createOverlayEntries() {
+    final List<OverlayEntry> overlays = [];
+
+    overlays.add(
+      OverlayEntry(
+        builder: (_) => FadeTransition(
+          opacity: animation,
+          child: CustomCall(),
+        ),
+        maintainState: false,
+        opaque: false,
+      ),
+    );
+
+    return overlays;
+  }
+
+  @override
+  bool get opaque => false;
+
+  @override
+  Duration get transitionDuration => Duration(milliseconds: 250);
 }
 
 class CustomPageRoute<T> extends PageRoute<T> {
@@ -140,19 +174,41 @@ class CustomPageRouteBuilder {
   }
 }
 
-class CustomCall extends StatelessWidget {
+class CustomCall extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
+  _CustomCallState createState() => _CustomCallState();
+}
+
+class _CustomCallState extends State<CustomCall> {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     Timer(Duration(seconds: 5), () {
       Navigator.pop(context);
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
-        margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.85),
-        width: 50,
+        margin: EdgeInsets.only(
+          top: MediaQuery.of(context).size.height * 0.85,
+          left: MediaQuery.of(context).size.width * 0.1,
+          right: MediaQuery.of(context).size.width * 0.1,
+        ),
+        // width: 50,
         height: 50,
-        color: Colors.black,
-        child: Center(child: Text("Works!")),
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.blue,
+              blurRadius: 5.0,
+              spreadRadius: 5.0,
+            )
+          ],
+        ),
+        child: Scaffold(body: Center(child: Text("Works!"))),
       ),
     );
   }

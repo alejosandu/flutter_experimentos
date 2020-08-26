@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         "pseudoBloc": (_) => PseudoBlocPage(),
         "inherited": (_) => InheritedWidgetPage(),
       },
-      initialRoute: "inherited",
+      initialRoute: "flushbar",
     );
   }
 }
