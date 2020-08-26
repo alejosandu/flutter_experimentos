@@ -22,11 +22,16 @@ class _CustomConsumerState extends State<CustomConsumer> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  void didChangeDependencies() {
     _notifier = CustomInheritedWidget.of(context).notifier;
     _notifier.addListener(() {
       setState(() {});
     });
+    super.didChangeDependencies();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return widget.builder(context, _notifier, widget.child);
   }
 }
