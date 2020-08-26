@@ -36,6 +36,13 @@ class FlushbarPage extends StatelessWidget {
     );
   }
 
+  _showDialog() async {
+    print("start");
+    final response = await CustomCenteredContent.dialog<String>(context);
+    print("response: $response");
+    print("end");
+  }
+
   @override
   Widget build(BuildContext context) {
     this.context = context;
@@ -66,6 +73,10 @@ class FlushbarPage extends StatelessWidget {
             RaisedButton(
               child: Text("Custom PageRouteBuilder"),
               onPressed: _showCustomPageRouteBuilder,
+            ),
+            RaisedButton(
+              child: Text("Custom Dialog"),
+              onPressed: _showDialog,
             ),
           ],
         ),
@@ -210,6 +221,54 @@ class _CustomCallState extends State<CustomCall> {
         ),
         child: Scaffold(body: Center(child: Text("Works!"))),
       ),
+    );
+  }
+}
+
+class CustomCenteredContent extends StatefulWidget {
+  static Future dialog<T>(BuildContext context) {
+    return showDialog<T>(
+      context: context,
+      builder: (context) => CustomCenteredContent(),
+      useRootNavigator: false,
+      barrierDismissible: false,
+    );
+  }
+
+  @override
+  _CustomCenteredContentState createState() => _CustomCenteredContentState();
+}
+
+class _CustomCenteredContentState extends State<CustomCenteredContent> {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    Timer(Duration(seconds: 5), () {
+      Navigator.pop(context, "Success!");
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      child: Container(
+        height: 100,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            CircularProgressIndicator(),
+            Text("Cargando"),
+          ],
+        ),
+      ),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(4.0),
+        ),
+      ),
+      clipBehavior: Clip.antiAlias,
     );
   }
 }
